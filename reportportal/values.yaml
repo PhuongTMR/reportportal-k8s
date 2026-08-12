@@ -160,7 +160,7 @@ serviceui:
   name: ui
   image:
     repository: reportportal/service-ui
-    tag: 5.15.4
+    tag: 5.15.5
   pullPolicy: Always
   replicaCount: 1
   resources:
@@ -253,7 +253,7 @@ serviceapi:
   name: api
   image:
     repository: reportportal/service-api
-    tag: 5.15.3
+    tag: 5.15.4
   pullPolicy: Always
   replicaCount: 1
   ## @param serviceapi.startupProbe configure startup probe
@@ -712,7 +712,7 @@ serviceanalyzer:
     repository: reportportal/service-auto-analyzer
     tag: 5.15.5
   pullPolicy: Always
-  uwsgiWorkers: 2
+  uwsgiWorkers: 1
   resources:
     requests:
       cpu: 500m
@@ -840,7 +840,7 @@ serviceanalyzer:
 migrations:
   image:
     repository: reportportal/migrations
-    tag: 5.15.3
+    tag: 5.15.4
   resources:
     requests:
       cpu: 100m
@@ -1319,7 +1319,7 @@ k8sWaitFor:
 kubectl:
   image:
     repository: rancher/kubectl
-    tag: v1.35.6
+    tag: v1.36.2
 
 ## Networking between pods
 ## Set @param k8s.networking.ssl to `true` if SSL enabled between pods inside Kubernetes cluster
@@ -1381,23 +1381,19 @@ resourceQuota:
 ## @section External dependencies installation configuration
 ##
 ## @param postgresql External PostgreSQL Helm Chart as dependency
+## Set postgresql.install to `false` if using a Cloud/On-Premise managed PostgreSQL
 ##
 postgresql:
-  ## set to `false` if using a Cloud/On-Premise managed database
-  ##
   install: true
   image:
-    repository: bitnamilegacy/postgresql
-    tag: 17.5.0-debian-12-r20
+    repository: postgres
+    tag: "18.4"
   auth:
-    postgresPassword: *dbpassword
     username: *dbuser
     password: *dbpassword
     database: *dbname
-  primary:
-    service:
-      ports:
-        postgresql: *dbport
+  service:
+    port: *dbport
 
 ## @param rabbitmq External RabbitMQ Helm Chart as dependency
 ## Set @param rabbitmq.install to `false` if using a Cloud/On-Premise managed RabbitMQ
@@ -1405,30 +1401,27 @@ postgresql:
 rabbitmq:
   install: true
   image:
-    repository: bitnamilegacy/rabbitmq
-    tag: 4.1.2-debian-12-r1
+    repository: rabbitmq
+    tag: 4.3.4-management
   auth:
+    enabled: true
     username: *msgbrokerUser
     password: *msgbrokerPass
-  containerPorts:
-    amqp: *msgbrokerPort
-    manager: *msgbrokerApiPort
-  ## @param rabbitmq.extraPlugins define additional RabbitMQ plugins to be enabled
-  ## Required for the ReportPortal to work
+  service:
+    amqpPort: *msgbrokerPort
+    managementPort: *msgbrokerApiPort
+  ## @param rabbitmq.additionalPlugins extra RabbitMQ plugins
+  ## Shovel and consistent-hash exchange plugins are required for ReportPortal
   ##
-  extraPlugins: >
-    rabbitmq_auth_backend_ldap
-    rabbitmq_consistent_hash_exchange
-    rabbitmq_shovel
-    rabbitmq_shovel_management
-  ## @param rabbitmq.extraConfiguration additional RabbitMQ configuration
-  ## @param rabbitmq.extraConfiguration.max_message_size increases the maximum allowed size for a single message
-  ## 128 MB (134217728 bytes) recommended for ReportPortal
+  additionalPlugins:
+    - rabbitmq_consistent_hash_exchange
+    - rabbitmq_shovel
+    - rabbitmq_shovel_management
+  ## RabbitMQ 4.3 denies queue_master_locator by default; ReportPortal API needs it
   ##
-  extraConfiguration: |-
-    max_message_size = 134217728
-  ingress:
-    tls: []
+  config:
+    extraConfiguration: |
+      deprecated_features.permit.queue_master_locator = true
 
 ## @param opensearch External OpenSearch Helm Chart as dependency
 ## Set @param opensearch.install to `false` if using a Cloud/On-Premise managed OpenSearch
@@ -1437,7 +1430,7 @@ opensearch:
   install: true
   image:
     repository: opensearchproject/opensearch
-    tag: 2.19.6
+    tag: 3.8.0
   ## @param opensearch.singleNode If "true", replicas will be forced from 3 to 1
   ##
   singleNode: true
