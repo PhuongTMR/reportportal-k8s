@@ -160,7 +160,7 @@ serviceui:
   name: ui
   image:
     repository: reportportal/service-ui
-    tag: 5.15.4
+    tag: 5.15.5
   pullPolicy: Always
   replicaCount: 1
   resources:
@@ -253,7 +253,7 @@ serviceapi:
   name: api
   image:
     repository: reportportal/service-api
-    tag: 5.15.3
+    tag: 5.15.4
   pullPolicy: Always
   replicaCount: 1
   ## @param serviceapi.startupProbe configure startup probe
@@ -840,7 +840,7 @@ serviceanalyzer:
 migrations:
   image:
     repository: reportportal/migrations
-    tag: 5.15.3
+    tag: 5.15.4
   resources:
     requests:
       cpu: 100m
@@ -1430,7 +1430,7 @@ opensearch:
   install: true
   image:
     repository: opensearchproject/opensearch
-    tag: 3.7.0
+    tag: 3.8.0
   ## @param opensearch.singleNode If "true", replicas will be forced from 3 to 1
   ##
   singleNode: true
