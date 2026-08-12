@@ -77,7 +77,7 @@ This document provides a comprehensive reference of all configurable parameters 
 |-----------|-------------|---------|
 | `serviceui.name` | Service name | `ui` |
 | `serviceui.image.repository` | Image repository | `reportportal/service-ui` |
-| `serviceui.image.tag` | Image tag | `5.15.4` |
+| `serviceui.image.tag` | Image tag | `5.15.5` |
 | `serviceui.pullPolicy` | Image pull policy | `Always` |
 | `serviceui.replicaCount` | Number of replicas | `1` |
 | `serviceui.resources.requests.cpu` | CPU requests | `100m` |
@@ -127,7 +127,7 @@ This document provides a comprehensive reference of all configurable parameters 
 |-----------|-------------|---------|
 | `serviceapi.name` | Service name | `api` |
 | `serviceapi.image.repository` | Image repository | `reportportal/service-api` |
-| `serviceapi.image.tag` | Image tag | `5.15.3` |
+| `serviceapi.image.tag` | Image tag | `5.15.4` |
 | `serviceapi.pullPolicy` | Image pull policy | `Always` |
 | `serviceapi.replicaCount` | Number of replicas | `1` |
 | `serviceapi.startupProbe.enabled` | Enable startup probe | `true` |
@@ -392,7 +392,7 @@ This document provides a comprehensive reference of all configurable parameters 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
 | `migrations.image.repository` | Image repository | `reportportal/migrations` |
-| `migrations.image.tag` | Image tag | `5.15.3` |
+| `migrations.image.tag` | Image tag | `5.15.4` |
 | `migrations.resources.requests.cpu` | CPU requests | `100m` |
 | `migrations.resources.requests.memory` | Memory requests | `128Mi` |
 | `migrations.resources.limits.cpu` | CPU limits | `100m` |

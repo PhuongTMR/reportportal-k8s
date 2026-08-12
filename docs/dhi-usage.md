@@ -2,7 +2,7 @@
 
 This guide explains how to run the ReportPortal Helm chart dependencies **PostgreSQL** and **RabbitMQ** with [Docker Hardened Images](https://www.docker.com/products/hardened-images/) from the `dhi.io` registry.
 
-The chart uses [CloudPirates](https://github.com/CloudPirates-io/helm-charts) subcharts for these dependencies. DHI images differ from Docker Official Images (entrypoints, UIDs, and data paths), so a few values overrides are required.
+The chart uses CloudPirates subcharts for these dependencies. DHI images differ from Docker Official Images (entrypoints, UIDs, and data paths), so a few values overrides are required.
 
 ## Table of Contents
 
@@ -138,16 +138,6 @@ rabbitmq:
     runAsNonRoot: true
   podSecurityContext:
     fsGroup: 65532
-  auth:
-    enabled: true
-  additionalPlugins:
-    - rabbitmq_management
-    - rabbitmq_consistent_hash_exchange
-    - rabbitmq_shovel
-    - rabbitmq_shovel_management
-  config:
-    extraConfiguration: |
-      deprecated_features.permit.queue_master_locator = true
 ```
 
 Catalog / guides: [dhi.io/rabbitmq](https://hub.docker.com/hardened-images/catalog/dhi/rabbitmq/guides).
@@ -192,14 +182,6 @@ rabbitmq:
     runAsNonRoot: true
   podSecurityContext:
     fsGroup: 65532
-  additionalPlugins:
-    - rabbitmq_management
-    - rabbitmq_consistent_hash_exchange
-    - rabbitmq_shovel
-    - rabbitmq_shovel_management
-  config:
-    extraConfiguration: |
-      deprecated_features.permit.queue_master_locator = true
 ```
 
 ---
